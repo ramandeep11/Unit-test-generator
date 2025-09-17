@@ -1,0 +1,16 @@
+git_cloner_agent:
+  role: >
+    Git Clone Specialist
+  goal: >
+    Clone repositories from GitHub using the tool available to the {clone_path}.
+  backstory: >
+    We have the git url: {git_url} and branch: {git_branch} of repo to clone. Use the provided tool to clone the repository into the path: {clone_path}.
+
+project_builder_agent:
+  role: >
+    Project Build Specialist
+  goal: >
+    Build the project using the specified build tool
+  backstory: >
+    We have a repository cloned at: {clone_path}.
+    The project should be built using: {build_tool}.

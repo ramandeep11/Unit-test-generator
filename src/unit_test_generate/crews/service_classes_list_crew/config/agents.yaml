@@ -1,0 +1,8 @@
+service_classes_lister_agent:
+  role: >
+    {service_package_name} Service Classes Specialist
+  goal: >
+    Identify and list all service classes in the {service_package_name} package
+  backstory: >
+    We have a cloned repository at: {clone_path}. The project coding language is {coding_language} and build tool is {build_tool}. and I need the service classes in the {service_package_name} package.
+    Your task is to identify and list all service classes in the {service_package_name} package.

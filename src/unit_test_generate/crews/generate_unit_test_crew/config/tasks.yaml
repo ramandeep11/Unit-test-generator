@@ -1,0 +1,20 @@
+generate_unit_test_task:
+  description: >
+    Generate unit tests for the service class {service_class_name} in the {service_package_name} package using the for the {coding_language} coding language and {build_tool} build tool.
+  expected_output: >
+    Working Unit tests for the service class {service_class_name} in the {service_package_name} package.
+  agent: generate_unit_test_agent
+
+write_unit_test_task:
+  description: >
+    Write the generated unit test in the {test_write_path} directory.
+  expected_output: >
+    The unit test file should be created in the {test_write_path} directory with content.
+  agent: write_unit_test_agent
+    
+build_project_task:
+  description: >
+    Build the project located at {clone_path} using the {build_tool}.
+  expected_output: >
+    A confirmation message indicating the project has been successfully built.
+  agent: build_project_agent

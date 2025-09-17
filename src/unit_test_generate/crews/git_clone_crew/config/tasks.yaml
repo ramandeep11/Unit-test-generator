@@ -1,0 +1,12 @@
+git_clone_task:
+  description: >
+    Clone the git repository from {git_url} at branch {git_branch} into the local path {clone_path} using the provided tools.
+  expected_output: >
+    The repository should exist at the {clone_path}.
+  
+project_build_task:
+  description: >
+    Build the project located at {clone_path} using the {build_tool}.
+  expected_output: >
+    A confirmation message indicating the project has been successfully built.
+  agent: project_builder_agent
