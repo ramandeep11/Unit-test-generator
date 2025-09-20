@@ -1,0 +1,17 @@
+git_commit_task:
+  description: >
+    We have a cloned project at {clone_path} from {git_url}.
+    commit the generated unit tests for the class {service_class_name}, with commit message {commit_message},
+    use the tools available to list the files changes and add and commit the relevant file.
+  expected_output: >
+    A confirmation message that the changes have been committed successfully.
+  agent: git_commit_agent
+
+git_checkout_task:
+  description: >
+    We have a cloned project at {clone_path} from {git_url}.
+    We need to create a new branch named {new_branch_name},
+    use the tools available to checkout the new branch.
+  expected_output: >
+    A confirmation message that the branch has been checked out successfully.
+  agent: git_checkout_agent

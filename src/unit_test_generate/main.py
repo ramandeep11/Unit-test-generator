@@ -3,12 +3,13 @@ from random import randint
 
 from pydantic import BaseModel
 
-from crewai.flow import Flow, listen, start
+from crewai.flow import Flow, listen, start, router
 
 from unit_test_generate.crews.poem_crew.poem_crew import PoemCrew
 from unit_test_generate.crews.git_clone_crew.git_clone_crew import GitCloneCrew
 from unit_test_generate.crews.service_classes_list_crew.service_classes_list_crew import ServiceClassesListCrew
 from unit_test_generate.crews.generate_unit_test_crew.generate_unit_test_crew import GenerateUnitTestCrew
+from unit_test_generate.crews.git_checkout_and_commit_crew.git_checkout_and_commit_crew import GitCheckoutAndCommitCrew
 
 class State(BaseModel):
     git_url: str = "https://github.com/SuhasKamate/Business_Management_Project.git"
@@ -26,6 +27,7 @@ class State(BaseModel):
     build_status: str = ""
     iteration: int = 0
     max_iterations: int = 3
+    new_branch_name: str = "Agent-branch"
 
 class UnitTestGeneratorFlow(Flow[State]):
 
@@ -96,7 +98,7 @@ class UnitTestGeneratorFlow(Flow[State]):
     #         print(f"Generated Unit Test for {service_class} and result", result.raw)
 
 
-    @listen(git_clone)
+    @router(git_clone)
     @listen("failed")
     def generate_unit_test_for_the_given_class(self):
         print("Generating unit tests for all service classes")
@@ -129,12 +131,29 @@ class UnitTestGeneratorFlow(Flow[State]):
             print("Max iterations reached. Ending flow.")
             self.end()
             return "end"
+        print(f"Build Status for debugging: {self.state.build_status}")
         return self.state.build_status
 
     @listen("success")
-    def success_method(self):
-        print(f"Successfully generated unit tests in {self.state.iteration} iterations.")
-
+    def git_checkout(self):
+        result = (
+            GitCheckoutAndCommitCrew()
+            .crew()
+            .kickoff(
+                inputs={
+                    "clone_path": self.state.clone_path,
+                    "git_url": self.state.git_url,
+                    "new_branch_name": self.state.new_branch_name,
+                    "service_class_name": self.state.service_class_name,
+                    "generated_test_code": self.state.generated_test_code,
+                    "test_write_path": self.state.test_write_path,
+                    "commit_message": f"Added unit tests for {self.state.service_class_name}",
+                }
+            )
+        )
+        print("Git Checkout and Commit Result:", result.raw)
+        return "end"
+    
     @listen("end")
     def end_method(self):
         print(f"Ending the flow after {self.state.iteration} iterations.")
